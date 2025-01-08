@@ -1,0 +1,202 @@
+[
+  {
+    "id": 1,
+    "name": "Bitpanda",
+    "region": "Vienna",
+    "lat": 48.2082,
+    "long": 16.3738,
+    "sector": "Fintech"
+  },
+  {
+    "id": 2,
+    "name": "TTTech",
+    "region": "Vienna",
+    "lat": 48.1859,
+    "long": 16.3892,
+    "sector": "Automotive & Industrial Tech"
+  },
+  {
+    "id": 3,
+    "name": "Anyline",
+    "region": "Vienna",
+    "lat": 48.1974,
+    "long": 16.3673,
+    "sector": "AI & Machine Learning"
+  },
+  {
+    "id": 4,
+    "name": "GoStudent",
+    "region": "Vienna",
+    "lat": 48.2089,
+    "long": 16.3724,
+    "sector": "EdTech"
+  },
+  {
+    "id": 5,
+    "name": "Dynatrace",
+    "region": "Upper Austria",
+    "lat": 48.3069,
+    "long": 14.2858,
+    "sector": "Software Monitoring"
+  },
+  {
+    "id": 6,
+    "name": "Blue Minds",
+    "region": "Vienna",
+    "lat": 48.2035,
+    "long": 16.3716,
+    "sector": "CleanTech"
+  },
+  {
+    "id": 7,
+    "name": "Parkside Interactive",
+    "region": "Styria",
+    "lat": 47.0707,
+    "long": 15.4395,
+    "sector": "Software Development"
+  },
+  {
+    "id": 8,
+    "name": "Speedinvest",
+    "region": "Vienna",
+    "lat": 48.2082,
+    "long": 16.3738,
+    "sector": "VC & Tech Investment"
+  },
+  {
+    "id": 9,
+    "name": "Runtastic",
+    "region": "Upper Austria",
+    "lat": 48.3366,
+    "long": 14.3207,
+    "sector": "Health Tech"
+  },
+  {
+    "id": 10,
+    "name": "AVL List",
+    "region": "Styria",
+    "lat": 47.0655,
+    "long": 15.4501,
+    "sector": "Automotive Tech"
+  },
+  {
+    "id": 11,
+    "name": "Pimcore",
+    "region": "Salzburg",
+    "lat": 47.8095,
+    "long": 13.055,
+    "sector": "Digital Experience Platform"
+  },
+  {
+    "id": 12,
+    "name": "World Direct",
+    "region": "Tyrol",
+    "lat": 47.2692,
+    "long": 11.4041,
+    "sector": "E-Business Solutions"
+  },
+  {
+    "id": 13,
+    "name": "TourRadar",
+    "region": "Vienna",
+    "lat": 48.2092,
+    "long": 16.3728,
+    "sector": "Travel Tech"
+  },
+  {
+    "id": 14,
+    "name": "NXRT",
+    "region": "Carinthia",
+    "lat": 46.6249,
+    "long": 14.3051,
+    "sector": "VR Technology"
+  },
+  {
+    "id": 15,
+    "name": "Frequentis",
+    "region": "Vienna",
+    "lat": 48.1865,
+    "long": 16.3782,
+    "sector": "Aviation Tech"
+  },
+  {
+    "id": 16,
+    "name": "Leftshift One",
+    "region": "Styria",
+    "lat": 47.0683,
+    "long": 15.438,
+    "sector": "AI Solutions"
+  },
+  {
+    "id": 17,
+    "name": "Wikitude",
+    "region": "Salzburg",
+    "lat": 47.8021,
+    "long": 13.0442,
+    "sector": "AR Technology"
+  },
+  {
+    "id": 18,
+    "name": "Emotion3D",
+    "region": "Vienna",
+    "lat": 48.1902,
+    "long": 16.3731,
+    "sector": "3D Technology"
+  },
+  {
+    "id": 19,
+    "name": "Anexia",
+    "region": "Carinthia",
+    "lat": 46.6169,
+    "long": 14.2619,
+    "sector": "Cloud Services"
+  },
+  {
+    "id": 20,
+    "name": "Austriacard",
+    "region": "Vienna",
+    "lat": 48.2292,
+    "long": 16.3891,
+    "sector": "Digital Security"
+  },
+  {
+    "id": 21,
+    "name": "Bongfish",
+    "region": "Styria",
+    "lat": 47.0628,
+    "long": 15.4428,
+    "sector": "Gaming Technology"
+  },
+  {
+    "id": 22,
+    "name": "Greenhive",
+    "region": "Lower Austria",
+    "lat": 48.2047,
+    "long": 16.3669,
+    "sector": "GreenTech"
+  },
+  {
+    "id": 23,
+    "name": "Quantum Logic",
+    "region": "Vienna",
+    "lat": 48.2132,
+    "long": 16.3794,
+    "sector": "Quantum Computing"
+  },
+  {
+    "id": 24,
+    "name": "Indoo.rs",
+    "region": "Vorarlberg",
+    "lat": 47.4239,
+    "long": 9.7428,
+    "sector": "Indoor Navigation"
+  },
+  {
+    "id": 25,
+    "name": "Crypto Future",
+    "region": "Vienna",
+    "lat": 48.2,
+    "long": 16.378,
+    "sector": "Blockchain"
+  }
+]
