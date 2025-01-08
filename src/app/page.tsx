@@ -3,8 +3,8 @@
 import CompanyList from "@/components/CompanyList";
 import HouseList from "@/components/HouseList";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import companies from "@/data/companies.json";
-import houses from "@/data/houses.json";
+import { companies } from "@/data/companies";
+import { houses } from "@/data/houses";
 import { Company } from "@/types/company";
 import { House } from "@/types/house";
 import dynamic from "next/dynamic";
@@ -42,7 +42,7 @@ export default function Home() {
           <DynamicAustriaMap
             data={activeTab === "company" ? companies : houses}
             onRegionSelect={setSelectedRegion}
-            selectedCompany={
+            selectedData={
               activeTab === "company" ? selectedCompany : selectedHouse
             }
           />
@@ -58,6 +58,7 @@ export default function Home() {
             <TabsList className="flex justify-center gap-4">
               <TabsTrigger value="company">Company</TabsTrigger>
               <TabsTrigger value="house">House</TabsTrigger>
+              <TabsTrigger value="distance">Distance</TabsTrigger>
             </TabsList>
 
             <TabsContent value="company">
@@ -73,6 +74,8 @@ export default function Home() {
                 onHouseSelect={setSelectedHouse}
               />
             </TabsContent>
+
+            <TabsContent value="distance"></TabsContent>
           </Tabs>
         </div>
       </div>

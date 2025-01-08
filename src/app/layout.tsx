@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Austrian Companies",
-  description: "Map for Austrian companies",
+  title: "Austrian Companies & Houses",
+  description: "Map for Austrian companies & houses",
 };
 
 export default function RootLayout({

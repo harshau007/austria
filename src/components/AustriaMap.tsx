@@ -1,8 +1,10 @@
 "use client";
 
 import austriaData from "@/data/austria-geojson.json";
+import { universities } from "@/data/universities";
 import { Company } from "@/types/company";
 import { House } from "@/types/house";
+import { University } from "@/types/university";
 import { FeatureCollection } from "geojson";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -18,13 +20,13 @@ import {
 interface AustriaMapProps {
   data: Company[] | House[];
   onRegionSelect: (region: string) => void;
-  selectedCompany: Company | House | null;
+  selectedData: Company | House | null;
 }
 
 const AustriaMap: React.FC<AustriaMapProps> = ({
   data,
   onRegionSelect,
-  selectedCompany,
+  selectedData,
 }) => {
   const center: [number, number] = [47.5162, 14.5501];
   const zoom = 7;
@@ -79,9 +81,12 @@ const AustriaMap: React.FC<AustriaMapProps> = ({
         })}
       />
       {data.map((item) => (
-        <DataMarker key={item.id} data={item} />
+        <DataMarker key={item.id + item.lat} data={item} />
       ))}
-      <MapController selectedCompany={selectedCompany} />
+      {universities.map((universities) => (
+        <UniversityMarker key={universities.id} data={universities} />
+      ))}
+      <MapController selectedData={selectedData} />
     </MapContainer>
   );
 };
@@ -124,7 +129,7 @@ const DataMarker: React.FC<CompanyMarkerProps> = ({ data }) => {
       let isMouseInsidePopup = false;
 
       marker.on({
-        mouseover: () => {
+        mousedown: () => {
           marker.bindPopup(popup).openPopup();
         },
         mouseout: () => {
@@ -163,18 +168,77 @@ const DataMarker: React.FC<CompanyMarkerProps> = ({ data }) => {
   );
 };
 
+interface UniversityMarkerProps {
+  data: University;
+}
+const UniversityMarker: React.FC<UniversityMarkerProps> = ({ data }) => {
+  const markerRef = useRef<L.CircleMarker>(null);
+
+  useEffect(() => {
+    if (markerRef.current) {
+      const marker = markerRef.current;
+      const popupContent = `
+      <div class="p-4 min-w-[200px] rounded-lg shadow-lg">
+        <h3 class="text-lg font-bold mb-2 text-gray-900">${data.name}</h3>
+        <div class="space-y-1">
+      </div>
+    `;
+      const popup = L.popup().setContent(popupContent);
+
+      let isMouseInsidePopup = false;
+
+      marker.on({
+        mouseover: () => {
+          marker.bindPopup(popup).openPopup();
+        },
+        mouseout: () => {
+          if (!isMouseInsidePopup) {
+            marker.closePopup();
+          }
+        },
+      });
+
+      marker.on("popupopen", () => {
+        const popupElement = document.querySelector(".leaflet-popup");
+        if (popupElement) {
+          popupElement.addEventListener("mouseenter", () => {
+            isMouseInsidePopup = true;
+          });
+          popupElement.addEventListener("mouseleave", () => {
+            isMouseInsidePopup = false;
+            marker.closePopup();
+          });
+        }
+      });
+    }
+  }, [data]);
+
+  return (
+    <CircleMarker
+      ref={markerRef}
+      center={[data.lat, data.long]}
+      radius={5}
+      fillColor="#4287f5"
+      color="#000"
+      weight={1}
+      opacity={1}
+      fillOpacity={0.8}
+    />
+  );
+};
+
 interface MapControllerProps {
-  selectedCompany: Company | null;
+  selectedData: Company | House | null;
 }
 
-const MapController: React.FC<MapControllerProps> = ({ selectedCompany }) => {
+const MapController: React.FC<MapControllerProps> = ({ selectedData }) => {
   const map = useMap();
 
   useEffect(() => {
-    if (selectedCompany) {
-      map.setView([selectedCompany.lat, selectedCompany.long], 10);
+    if (selectedData) {
+      map.setView([selectedData.lat, selectedData.long], 10);
     }
-  }, [selectedCompany, map]);
+  }, [selectedData, map]);
 
   return null;
 };
