@@ -5,7 +5,9 @@
     "region": "Vienna",
     "lat": 48.2082,
     "long": 16.3738,
-    "sector": "Fintech"
+    "sector": "Fintech",
+    "rent": "",
+    "url": "https://www.bitpanda.com"
   },
   {
     "id": 2,
@@ -13,7 +15,9 @@
     "region": "Vienna",
     "lat": 48.1859,
     "long": 16.3892,
-    "sector": "Automotive & Industrial Tech"
+    "sector": "Automotive & Industrial Tech",
+    "rent": "",
+    "url": "https://www.tttech.com"
   },
   {
     "id": 3,
@@ -21,7 +25,9 @@
     "region": "Vienna",
     "lat": 48.1974,
     "long": 16.3673,
-    "sector": "AI & Machine Learning"
+    "sector": "AI & Machine Learning",
+    "rent": "",
+    "url": "https://www.anyline.com"
   },
   {
     "id": 4,
@@ -29,7 +35,9 @@
     "region": "Vienna",
     "lat": 48.2089,
     "long": 16.3724,
-    "sector": "EdTech"
+    "sector": "EdTech",
+    "rent": "",
+    "url": "https://www.gostudent.org"
   },
   {
     "id": 5,
@@ -37,7 +45,9 @@
     "region": "Upper Austria",
     "lat": 48.3069,
     "long": 14.2858,
-    "sector": "Software Monitoring"
+    "sector": "Software Monitoring",
+    "rent": "",
+    "url": "https://www.dynatrace.com"
   },
   {
     "id": 6,
@@ -45,7 +55,9 @@
     "region": "Vienna",
     "lat": 48.2035,
     "long": 16.3716,
-    "sector": "CleanTech"
+    "sector": "CleanTech",
+    "rent": "",
+    "url": "https://www.blueminds-company.com"
   },
   {
     "id": 7,
@@ -53,7 +65,9 @@
     "region": "Styria",
     "lat": 47.0707,
     "long": 15.4395,
-    "sector": "Software Development"
+    "sector": "Software Development",
+    "rent": "",
+    "url": "https://www.parkside-interactive.com"
   },
   {
     "id": 8,
@@ -61,7 +75,9 @@
     "region": "Vienna",
     "lat": 48.2082,
     "long": 16.3738,
-    "sector": "VC & Tech Investment"
+    "sector": "VC & Tech Investment",
+    "rent": "",
+    "url": "https://www.speedinvest.com"
   },
   {
     "id": 9,
@@ -69,7 +85,9 @@
     "region": "Upper Austria",
     "lat": 48.3366,
     "long": 14.3207,
-    "sector": "Health Tech"
+    "sector": "Health Tech",
+    "rent": "",
+    "url": "https://www.runtastic.com"
   },
   {
     "id": 10,
@@ -77,7 +95,9 @@
     "region": "Styria",
     "lat": 47.0655,
     "long": 15.4501,
-    "sector": "Automotive Tech"
+    "sector": "Automotive Tech",
+    "rent": "",
+    "url": "https://www.avl.com"
   },
   {
     "id": 11,
@@ -85,7 +105,9 @@
     "region": "Salzburg",
     "lat": 47.8095,
     "long": 13.055,
-    "sector": "Digital Experience Platform"
+    "sector": "Digital Experience Platform",
+    "rent": "",
+    "url": "https://www.pimcore.com"
   },
   {
     "id": 12,
@@ -93,7 +115,9 @@
     "region": "Tyrol",
     "lat": 47.2692,
     "long": 11.4041,
-    "sector": "E-Business Solutions"
+    "sector": "E-Business Solutions",
+    "rent": "",
+    "url": "https://www.world-direct.at"
   },
   {
     "id": 13,
@@ -101,7 +125,9 @@
     "region": "Vienna",
     "lat": 48.2092,
     "long": 16.3728,
-    "sector": "Travel Tech"
+    "sector": "Travel Tech",
+    "rent": "",
+    "url": "https://www.tourradar.com"
   },
   {
     "id": 14,
@@ -109,7 +135,9 @@
     "region": "Carinthia",
     "lat": 46.6249,
     "long": 14.3051,
-    "sector": "VR Technology"
+    "sector": "VR Technology",
+    "rent": "",
+    "url": "https://www.nxrt.io"
   },
   {
     "id": 15,
@@ -117,7 +145,9 @@
     "region": "Vienna",
     "lat": 48.1865,
     "long": 16.3782,
-    "sector": "Aviation Tech"
+    "sector": "Aviation Tech",
+    "rent": "",
+    "url": "https://www.frequentis.com"
   },
   {
     "id": 16,
@@ -125,7 +155,9 @@
     "region": "Styria",
     "lat": 47.0683,
     "long": 15.438,
-    "sector": "AI Solutions"
+    "sector": "AI Solutions",
+    "rent": "",
+    "url": "https://www.leftshift.one"
   },
   {
     "id": 17,
@@ -133,7 +165,9 @@
     "region": "Salzburg",
     "lat": 47.8021,
     "long": 13.0442,
-    "sector": "AR Technology"
+    "sector": "AR Technology",
+    "rent": "",
+    "url": "https://www.wikitude.com"
   },
   {
     "id": 18,
@@ -141,7 +175,9 @@
     "region": "Vienna",
     "lat": 48.1902,
     "long": 16.3731,
-    "sector": "3D Technology"
+    "sector": "3D Technology",
+    "rent": "",
+    "url": "https://www.emotion3d.at"
   },
   {
     "id": 19,
@@ -149,7 +185,9 @@
     "region": "Carinthia",
     "lat": 46.6169,
     "long": 14.2619,
-    "sector": "Cloud Services"
+    "sector": "Cloud Services",
+    "rent": "",
+    "url": "https://www.anexia.com"
   },
   {
     "id": 20,
@@ -157,7 +195,9 @@
     "region": "Vienna",
     "lat": 48.2292,
     "long": 16.3891,
-    "sector": "Digital Security"
+    "sector": "Digital Security",
+    "rent": "",
+    "url": "https://www.austriacard.com"
   },
   {
     "id": 21,
@@ -165,7 +205,9 @@
     "region": "Styria",
     "lat": 47.0628,
     "long": 15.4428,
-    "sector": "Gaming Technology"
+    "sector": "Gaming Technology",
+    "rent": "",
+    "url": "https://www.bongfish.com"
   },
   {
     "id": 22,
@@ -173,7 +215,9 @@
     "region": "Lower Austria",
     "lat": 48.2047,
     "long": 16.3669,
-    "sector": "GreenTech"
+    "sector": "GreenTech",
+    "rent": "",
+    "url": "https://www.greenhive.eu"
   },
   {
     "id": 23,
@@ -181,7 +225,9 @@
     "region": "Vienna",
     "lat": 48.2132,
     "long": 16.3794,
-    "sector": "Quantum Computing"
+    "sector": "Quantum Computing",
+    "rent": "",
+    "url": "https://www.quantumlogic.at"
   },
   {
     "id": 24,
@@ -189,7 +235,9 @@
     "region": "Vorarlberg",
     "lat": 47.4239,
     "long": 9.7428,
-    "sector": "Indoor Navigation"
+    "sector": "Indoor Navigation",
+    "rent": "",
+    "url": "https://www.indoo.rs"
   },
   {
     "id": 25,
@@ -197,6 +245,18 @@
     "region": "Vienna",
     "lat": 48.2,
     "long": 16.378,
-    "sector": "Blockchain"
+    "sector": "Blockchain",
+    "rent": "",
+    "url": "https://www.crypto-future.com"
+  },
+  {
+    "id": 26,
+    "name": "Bitmovin",
+    "region": "Carinthia",
+    "lat": 46.6357,
+    "long": 14.311817,
+    "sector": "Multimedia Technology",
+    "rent": "",
+    "url": "https://bitmovin.com"
   }
 ]

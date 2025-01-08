@@ -2,6 +2,7 @@
 
 import austriaData from "@/data/austria-geojson.json";
 import { Company } from "@/types/company";
+import { House } from "@/types/house";
 import { FeatureCollection } from "geojson";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -15,13 +16,13 @@ import {
 } from "react-leaflet";
 
 interface AustriaMapProps {
-  companies: Company[];
+  data: Company[] | House[];
   onRegionSelect: (region: string) => void;
-  selectedCompany: Company | null;
+  selectedCompany: Company | House | null;
 }
 
 const AustriaMap: React.FC<AustriaMapProps> = ({
-  companies,
+  data,
   onRegionSelect,
   selectedCompany,
 }) => {
@@ -29,7 +30,7 @@ const AustriaMap: React.FC<AustriaMapProps> = ({
   const zoom = 7;
 
   const onEachFeature = (feature: GeoJSON.Feature, layer: L.Layer) => {
-    if (feature.properties && feature.properties.name) {
+    if (feature.properties?.name) {
       const popupContent = `<strong>${feature.properties.name}</strong>`;
       const popup = L.popup().setContent(popupContent);
 
@@ -38,7 +39,7 @@ const AustriaMap: React.FC<AustriaMapProps> = ({
           const layer = e.target;
           layer.setStyle({
             fillColor: "#FFA500",
-            fillOpacity: 0.7,
+            fillOpacity: 0.15,
           });
           layer.bindPopup(popup).openPopup();
         },
@@ -77,8 +78,8 @@ const AustriaMap: React.FC<AustriaMapProps> = ({
           fillOpacity: 0.1,
         })}
       />
-      {companies.map((company) => (
-        <CompanyMarker key={company.id} company={company} />
+      {data.map((item) => (
+        <DataMarker key={item.id} data={item} />
       ))}
       <MapController selectedCompany={selectedCompany} />
     </MapContainer>
@@ -86,47 +87,72 @@ const AustriaMap: React.FC<AustriaMapProps> = ({
 };
 
 interface CompanyMarkerProps {
-  company: Company;
+  data: Company | House;
 }
 
-const CompanyMarker: React.FC<CompanyMarkerProps> = ({ company }) => {
+const DataMarker: React.FC<CompanyMarkerProps> = ({ data }) => {
   const markerRef = useRef<L.CircleMarker>(null);
 
   useEffect(() => {
     if (markerRef.current) {
       const marker = markerRef.current;
       const popupContent = `
-        <div className="p-4 min-w-[200px] rounded-lg shadow-lg">
-          <h3 className="text-lg font-bold mb-2 text-gray-900">${company.name}</h3>
-          <div className="space-y-1">
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-medium">Region:</span>
-              <span className="text-sm text-gray-800">${company.region}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-gray-600">Sector:</span>
-              <span className="text-sm text-gray-800">${company.sector}</span>
-            </div>
+      <div class="p-4 min-w-[200px] rounded-lg shadow-lg">
+        <h3 class="text-lg font-bold mb-2 text-gray-900">${data.name}</h3>
+        <div class="space-y-1">
+          <div class="flex items-center gap-2">
+            <span class="text-sm font-medium">${
+              data.sector ? "Sector:" : "Rent:"
+            }</span>
+            <span class="text-sm text-gray-800">${
+              data.sector || "€" + data.rent + "/month"
+            }</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-sm font-medium text-gray-600">Url:</span>
+            <a href="${
+              data.url
+            }" target="_blank" rel="noopener noreferrer" class="text-sm text-blue-500 underline">${
+        data.url
+      }</a>
           </div>
         </div>
-      `;
+      </div>
+    `;
       const popup = L.popup().setContent(popupContent);
+
+      let isMouseInsidePopup = false;
 
       marker.on({
         mouseover: () => {
           marker.bindPopup(popup).openPopup();
         },
         mouseout: () => {
-          marker.closePopup();
+          if (!isMouseInsidePopup) {
+            marker.closePopup();
+          }
         },
       });
+
+      marker.on("popupopen", () => {
+        const popupElement = document.querySelector(".leaflet-popup");
+        if (popupElement) {
+          popupElement.addEventListener("mouseenter", () => {
+            isMouseInsidePopup = true;
+          });
+          popupElement.addEventListener("mouseleave", () => {
+            isMouseInsidePopup = false;
+            marker.closePopup();
+          });
+        }
+      });
     }
-  }, [company]);
+  }, [data]);
 
   return (
     <CircleMarker
       ref={markerRef}
-      center={[company.lat, company.long]}
+      center={[data.lat, data.long]}
       radius={5}
       fillColor="#FF0000"
       color="#000"
