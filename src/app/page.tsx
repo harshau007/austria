@@ -13,12 +13,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Toggle } from "@/components/ui/toggle";
 import { companies } from "@/data/companies";
 import { houses } from "@/data/houses";
 import { universities } from "@/data/universities";
 import { Company } from "@/types/company";
 import { House } from "@/types/house";
 import { University } from "@/types/university";
+import { TrainFront } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useState } from "react";
 
@@ -31,6 +33,7 @@ export default function Home() {
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
   const [selectedHouse, setSelectedHouse] = useState<House | null>(null);
   const [fromLocation, setFromLocation] = useState<House | null>(houses[0]);
+  const [isTrainActive, setIsTrainActive] = useState(false);
   const [toLocation, setToLocation] = useState<University | null>(
     universities[0]
   );
@@ -68,10 +71,14 @@ export default function Home() {
             toLong={toLocation?.long}
             fromLat={fromLocation?.lat}
             fromLong={fromLocation?.long}
+            isTrainActive={isTrainActive}
           />
         </div>
 
         <div className="w-full lg:w-1/3 mt-4 lg:mt-0 space-y-4">
+          <Toggle onClick={() => setIsTrainActive(!isTrainActive)}>
+            <TrainFront />
+          </Toggle>
           <Tabs
             value={activeTab}
             onValueChange={(value) =>

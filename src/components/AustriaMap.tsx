@@ -30,6 +30,7 @@ interface AustriaMapProps {
   toLong: number | undefined;
   fromLat: number | undefined;
   fromLong: number | undefined;
+  isTrainActive: boolean;
 }
 
 const AustriaMap: React.FC<AustriaMapProps> = ({
@@ -41,6 +42,7 @@ const AustriaMap: React.FC<AustriaMapProps> = ({
   toLong,
   fromLat,
   fromLong,
+  isTrainActive,
 }) => {
   const center: [number, number] = [47.5162, 14.5501];
   const zoom = 7;
@@ -75,34 +77,42 @@ const AustriaMap: React.FC<AustriaMapProps> = ({
           fillOpacity: 0.1,
         })}
       />
-      <GeoJSON
-        data={austriaRailwayData as FeatureCollection}
-        style={() => ({
-          color: "#333",
-          weight: 2,
-          opacity: 0.7,
-        })}
-        pointToLayer={(feature, latlng) => {
-          if (feature.properties && feature.properties.railway === "station") {
-            return L.circleMarker(latlng, {
-              radius: 5,
-              fillColor: "#ff7800",
-              color: "#000",
-              weight: 1,
-              opacity: 1,
-              fillOpacity: 0.8,
-            }).bindPopup(feature.properties.name || "Unknown Station");
-          }
-          return L.marker(latlng);
-        }}
-        onEachFeature={(feature, layer) => {
-          if (feature.properties && feature.properties.railway === "station") {
-            layer.on("click", () => {
-              layer.openPopup();
-            });
-          }
-        }}
-      />
+      {isTrainActive && (
+        <GeoJSON
+          data={austriaRailwayData as FeatureCollection}
+          style={() => ({
+            color: "#333",
+            weight: 2,
+            opacity: 0.7,
+          })}
+          pointToLayer={(feature, latlng) => {
+            if (
+              feature.properties &&
+              feature.properties.railway === "station"
+            ) {
+              return L.circleMarker(latlng, {
+                radius: 5,
+                fillColor: "#ff7800",
+                color: "#000",
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.8,
+              }).bindPopup(feature.properties.name || "Unknown Station");
+            }
+            return L.marker(latlng);
+          }}
+          onEachFeature={(feature, layer) => {
+            if (
+              feature.properties &&
+              feature.properties.railway === "station"
+            ) {
+              layer.on("click", () => {
+                layer.openPopup();
+              });
+            }
+          }}
+        />
+      )}
       {data.map((item) => (
         <DataMarker key={item.id + item.lat} data={item} />
       ))}
