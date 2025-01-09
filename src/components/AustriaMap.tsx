@@ -2,6 +2,7 @@
 
 import austriaData from "@/data/austria-geojson.json";
 import { universities } from "@/data/universities";
+import { getDistance } from "@/lib/utils";
 import { Company } from "@/types/company";
 import { House } from "@/types/house";
 import { University } from "@/types/university";
@@ -13,7 +14,9 @@ import {
   CircleMarker,
   GeoJSON,
   MapContainer,
+  Polyline,
   TileLayer,
+  Tooltip,
   useMap,
 } from "react-leaflet";
 
@@ -21,38 +24,29 @@ interface AustriaMapProps {
   data: Company[] | House[];
   onRegionSelect: (region: string) => void;
   selectedData: Company | House | null;
+  tab: string;
+  toLat: number | undefined;
+  toLong: number | undefined;
+  fromLat: number | undefined;
+  fromLong: number | undefined;
 }
 
 const AustriaMap: React.FC<AustriaMapProps> = ({
   data,
   onRegionSelect,
   selectedData,
+  tab,
+  toLat,
+  toLong,
+  fromLat,
+  fromLong,
 }) => {
   const center: [number, number] = [47.5162, 14.5501];
   const zoom = 7;
 
   const onEachFeature = (feature: GeoJSON.Feature, layer: L.Layer) => {
     if (feature.properties?.name) {
-      const popupContent = `<strong>${feature.properties.name}</strong>`;
-      const popup = L.popup().setContent(popupContent);
-
       layer.on({
-        mouseover: (e) => {
-          const layer = e.target;
-          layer.setStyle({
-            fillColor: "#FFA500",
-            fillOpacity: 0.15,
-          });
-          layer.bindPopup(popup).openPopup();
-        },
-        mouseout: (e) => {
-          const layer = e.target;
-          layer.setStyle({
-            fillColor: "#FD8D3C",
-            fillOpacity: 0.1,
-          });
-          layer.closePopup();
-        },
         click: () => onRegionSelect(feature.properties?.name),
       });
     }
@@ -79,30 +73,37 @@ const AustriaMap: React.FC<AustriaMapProps> = ({
           dashArray: "3",
           fillOpacity: 0.1,
         })}
-      />
+      ></GeoJSON>
       {data.map((item) => (
         <DataMarker key={item.id + item.lat} data={item} />
       ))}
-      {universities.map((universities) => (
-        <UniversityMarker key={universities.id} data={universities} />
+      {universities.map((university) => (
+        <UniversityMarker key={university.id} data={university} />
       ))}
+      {tab === "distance" && (
+        <DistanceLines
+          toLat={toLat}
+          toLong={toLong}
+          fromLat={fromLat}
+          fromLong={fromLong}
+        />
+      )}
       <MapController selectedData={selectedData} />
     </MapContainer>
   );
 };
 
-interface CompanyMarkerProps {
+interface DataMarkerProps {
   data: Company | House;
 }
 
-const DataMarker: React.FC<CompanyMarkerProps> = ({ data }) => {
+const DataMarker: React.FC<DataMarkerProps> = ({ data }) => {
   const markerRef = useRef<L.CircleMarker>(null);
 
   useEffect(() => {
     if (markerRef.current) {
       const marker = markerRef.current;
       const popupContent = `
-      <div class="p-4 min-w-[200px] rounded-lg shadow-lg">
         <h3 class="text-lg font-bold mb-2 text-gray-900">${data.name}</h3>
         <div class="space-y-1">
           <div class="flex items-center gap-2">
@@ -122,34 +123,13 @@ const DataMarker: React.FC<CompanyMarkerProps> = ({ data }) => {
       }</a>
           </div>
         </div>
-      </div>
-    `;
+      `;
       const popup = L.popup().setContent(popupContent);
 
-      let isMouseInsidePopup = false;
-
       marker.on({
-        mousedown: () => {
+        click: () => {
           marker.bindPopup(popup).openPopup();
         },
-        mouseout: () => {
-          if (!isMouseInsidePopup) {
-            marker.closePopup();
-          }
-        },
-      });
-
-      marker.on("popupopen", () => {
-        const popupElement = document.querySelector(".leaflet-popup");
-        if (popupElement) {
-          popupElement.addEventListener("mouseenter", () => {
-            isMouseInsidePopup = true;
-          });
-          popupElement.addEventListener("mouseleave", () => {
-            isMouseInsidePopup = false;
-            marker.closePopup();
-          });
-        }
       });
     }
   }, [data]);
@@ -171,6 +151,7 @@ const DataMarker: React.FC<CompanyMarkerProps> = ({ data }) => {
 interface UniversityMarkerProps {
   data: University;
 }
+
 const UniversityMarker: React.FC<UniversityMarkerProps> = ({ data }) => {
   const markerRef = useRef<L.CircleMarker>(null);
 
@@ -178,37 +159,15 @@ const UniversityMarker: React.FC<UniversityMarkerProps> = ({ data }) => {
     if (markerRef.current) {
       const marker = markerRef.current;
       const popupContent = `
-      <div class="p-4 min-w-[200px] rounded-lg shadow-lg">
         <h3 class="text-lg font-bold mb-2 text-gray-900">${data.name}</h3>
         <div class="space-y-1">
-      </div>
-    `;
+      `;
       const popup = L.popup().setContent(popupContent);
 
-      let isMouseInsidePopup = false;
-
       marker.on({
-        mouseover: () => {
+        click: () => {
           marker.bindPopup(popup).openPopup();
         },
-        mouseout: () => {
-          if (!isMouseInsidePopup) {
-            marker.closePopup();
-          }
-        },
-      });
-
-      marker.on("popupopen", () => {
-        const popupElement = document.querySelector(".leaflet-popup");
-        if (popupElement) {
-          popupElement.addEventListener("mouseenter", () => {
-            isMouseInsidePopup = true;
-          });
-          popupElement.addEventListener("mouseleave", () => {
-            isMouseInsidePopup = false;
-            marker.closePopup();
-          });
-        }
       });
     }
   }, [data]);
@@ -243,4 +202,41 @@ const MapController: React.FC<MapControllerProps> = ({ selectedData }) => {
   return null;
 };
 
+interface DistanceLinesProps {
+  toLat: number | undefined;
+  toLong: number | undefined;
+  fromLat: number | undefined;
+  fromLong: number | undefined;
+}
+
+const DistanceLines: React.FC<DistanceLinesProps> = ({
+  toLat,
+  toLong,
+  fromLat,
+  fromLong,
+}) => {
+  const distance = getDistance(toLat!, toLong!, fromLat!, fromLong!);
+  return (
+    <>
+      <Polyline
+        key={`${toLat}-${fromLong}`}
+        positions={[
+          [toLat!, toLong!],
+          [fromLat!, fromLong!],
+        ]}
+        color="purple"
+        weight={4}
+        opacity={0.5}
+        dashArray="5, 5"
+      >
+        <Tooltip permanent>
+          <span>
+            {/* {house.name} - {university.name} */}
+            {distance.toFixed(2)} km
+          </span>
+        </Tooltip>
+      </Polyline>
+    </>
+  );
+};
 export default AustriaMap;

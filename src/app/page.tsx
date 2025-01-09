@@ -2,11 +2,23 @@
 
 import CompanyList from "@/components/CompanyList";
 import HouseList from "@/components/HouseList";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { companies } from "@/data/companies";
 import { houses } from "@/data/houses";
+import { universities } from "@/data/universities";
 import { Company } from "@/types/company";
 import { House } from "@/types/house";
+import { University } from "@/types/university";
 import dynamic from "next/dynamic";
 import { useState } from "react";
 
@@ -18,7 +30,13 @@ export default function Home() {
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
   const [selectedHouse, setSelectedHouse] = useState<House | null>(null);
-  const [activeTab, setActiveTab] = useState<"company" | "house">("company");
+  const [fromLocation, setFromLocation] = useState<House | null>(houses[0]);
+  const [toLocation, setToLocation] = useState<University | null>(
+    universities[0]
+  );
+  const [activeTab, setActiveTab] = useState<"company" | "house" | "distance">(
+    "company"
+  );
 
   const filteredCompanies = selectedRegion
     ? companies.filter((company) => company.region === selectedRegion)
@@ -28,7 +46,7 @@ export default function Home() {
     ? houses.filter((house) => house.region === selectedRegion)
     : houses;
 
-  const handleTabChange = (tab: "company" | "house") => {
+  const handleTabChange = (tab: "company" | "house" | "distance") => {
     setActiveTab(tab);
   };
 
@@ -45,6 +63,11 @@ export default function Home() {
             selectedData={
               activeTab === "company" ? selectedCompany : selectedHouse
             }
+            tab={activeTab}
+            toLat={toLocation?.lat}
+            toLong={toLocation?.long}
+            fromLat={fromLocation?.lat}
+            fromLong={fromLocation?.long}
           />
         </div>
 
@@ -52,7 +75,7 @@ export default function Home() {
           <Tabs
             value={activeTab}
             onValueChange={(value) =>
-              handleTabChange(value as "company" | "house")
+              handleTabChange(value as "company" | "house" | "distance")
             }
           >
             <TabsList className="flex justify-center gap-4">
@@ -75,7 +98,73 @@ export default function Home() {
               />
             </TabsContent>
 
-            <TabsContent value="distance"></TabsContent>
+            <TabsContent value="distance">
+              <div>
+                <Label
+                  htmlFor="from-location"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  From
+                </Label>
+                <Select
+                  onValueChange={(value) =>
+                    setFromLocation(
+                      houses.find((h) => h.id.toString() === value) || null
+                    )
+                  }
+                  defaultValue={toLocation?.id.toString()}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select From Location" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Houses</SelectLabel>
+                      {houses.map((house) => (
+                        <SelectItem key={house.id} value={house.id.toString()}>
+                          {house.name}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="mt-4">
+                <Label
+                  htmlFor="to-location"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  To
+                </Label>
+                <Select
+                  onValueChange={(value) =>
+                    setToLocation(
+                      universities.find((u) => u.id.toString() === value) ||
+                        null
+                    )
+                  }
+                  defaultValue={fromLocation?.id.toString()}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select To Location" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Universities</SelectLabel>
+                      {universities.map((university) => (
+                        <SelectItem
+                          key={university.id}
+                          value={university.id.toString()}
+                        >
+                          {university.name}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+            </TabsContent>
           </Tabs>
         </div>
       </div>
