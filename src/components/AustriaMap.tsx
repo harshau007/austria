@@ -1,6 +1,7 @@
 "use client";
 
 import austriaData from "@/data/austria-geojson.json";
+import austriaRailwayData from "@/data/railways-geojson.json";
 import { universities } from "@/data/universities";
 import { getDistance } from "@/lib/utils";
 import { Company } from "@/types/company";
@@ -11,9 +12,9 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useEffect, useRef } from "react";
 import {
-  CircleMarker,
   GeoJSON,
   MapContainer,
+  Marker,
   Polyline,
   TileLayer,
   Tooltip,
@@ -73,7 +74,35 @@ const AustriaMap: React.FC<AustriaMapProps> = ({
           dashArray: "3",
           fillOpacity: 0.1,
         })}
-      ></GeoJSON>
+      />
+      <GeoJSON
+        data={austriaRailwayData as FeatureCollection}
+        style={() => ({
+          color: "#333",
+          weight: 2,
+          opacity: 0.7,
+        })}
+        pointToLayer={(feature, latlng) => {
+          if (feature.properties && feature.properties.railway === "station") {
+            return L.circleMarker(latlng, {
+              radius: 5,
+              fillColor: "#ff7800",
+              color: "#000",
+              weight: 1,
+              opacity: 1,
+              fillOpacity: 0.8,
+            }).bindPopup(feature.properties.name || "Unknown Station");
+          }
+          return L.marker(latlng);
+        }}
+        onEachFeature={(feature, layer) => {
+          if (feature.properties && feature.properties.railway === "station") {
+            layer.on("click", () => {
+              layer.openPopup();
+            });
+          }
+        }}
+      />
       {data.map((item) => (
         <DataMarker key={item.id + item.lat} data={item} />
       ))}
@@ -98,7 +127,7 @@ interface DataMarkerProps {
 }
 
 const DataMarker: React.FC<DataMarkerProps> = ({ data }) => {
-  const markerRef = useRef<L.CircleMarker>(null);
+  const markerRef = useRef<L.Marker>(null);
 
   useEffect(() => {
     if (markerRef.current) {
@@ -135,15 +164,17 @@ const DataMarker: React.FC<DataMarkerProps> = ({ data }) => {
   }, [data]);
 
   return (
-    <CircleMarker
+    <Marker
       ref={markerRef}
-      center={[data.lat, data.long]}
-      radius={5}
-      fillColor="#FF0000"
-      color="#000"
-      weight={1}
-      opacity={1}
-      fillOpacity={0.8}
+      position={[data.lat, data.long]}
+      icon={L.divIcon({
+        className: "custom-marker",
+        html: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#00ab14" width="24" height="24">
+                 <path d="M12 0C7.58 0 4 3.58 4 8c0 5.25 8 16 8 16s8-10.75 8-16c0-4.42-3.58-8-8-8zm0 11c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/>
+               </svg>`,
+        iconSize: [24, 24],
+        iconAnchor: [12, 18],
+      })}
     />
   );
 };
@@ -153,7 +184,7 @@ interface UniversityMarkerProps {
 }
 
 const UniversityMarker: React.FC<UniversityMarkerProps> = ({ data }) => {
-  const markerRef = useRef<L.CircleMarker>(null);
+  const markerRef = useRef<L.Marker>(null);
 
   useEffect(() => {
     if (markerRef.current) {
@@ -173,15 +204,17 @@ const UniversityMarker: React.FC<UniversityMarkerProps> = ({ data }) => {
   }, [data]);
 
   return (
-    <CircleMarker
+    <Marker
       ref={markerRef}
-      center={[data.lat, data.long]}
-      radius={5}
-      fillColor="#4287f5"
-      color="#000"
-      weight={1}
-      opacity={1}
-      fillOpacity={0.8}
+      position={[data.lat, data.long]}
+      icon={L.divIcon({
+        className: "custom-marker",
+        html: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#4287f5" width="24" height="24">
+                 <path d="M12 0C7.58 0 4 3.58 4 8c0 5.25 8 16 8 16s8-10.75 8-16c0-4.42-3.58-8-8-8zm0 11c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/>
+               </svg>`,
+        iconSize: [24, 24],
+        iconAnchor: [12, 18],
+      })}
     />
   );
 };
@@ -195,7 +228,7 @@ const MapController: React.FC<MapControllerProps> = ({ selectedData }) => {
 
   useEffect(() => {
     if (selectedData) {
-      map.setView([selectedData.lat, selectedData.long], 10);
+      map.setView([selectedData.lat, selectedData.long], 20);
     }
   }, [selectedData, map]);
 

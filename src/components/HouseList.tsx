@@ -1,14 +1,30 @@
 import { House } from "@/types/house";
+import { ListRestart } from "lucide-react";
 
 interface HouseListProps {
   houses: House[];
   onHouseSelect: (company: House) => void;
+  setSelectedRegion: (region: string | null) => void;
 }
 
-const HouseList: React.FC<HouseListProps> = ({ houses, onHouseSelect }) => {
+const HouseList: React.FC<HouseListProps> = ({
+  houses,
+  onHouseSelect,
+  setSelectedRegion,
+}) => {
   return (
     <div className=" shadow-md rounded-lg p-4 sm:p-6">
-      <h2 className="text-xl sm:text-2xl font-semibold mb-4">Houses</h2>
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-xl sm:text-2xl font-semibold">Houses</h2>
+        <button
+          onClick={() => setSelectedRegion(null)}
+          className="hover:text-red-500 transition-colors duration-200 flex items-center"
+          aria-label="Reset All Company Selections"
+        >
+          <ListRestart className="w-5 h-5" />
+          <span className="ml-2 text-sm">Reset</span>
+        </button>
+      </div>
       <div className="overflow-y-auto max-h-[250px] sm:max-h-[350px] md:max-h-[450px] lg:max-h-[550px]">
         <ul className="space-y-2">
           {houses.map((house) => (

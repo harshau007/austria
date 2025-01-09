@@ -51,7 +51,7 @@ export default function Home() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-4 sm:p-8 md:p-12 lg:p-24">
+    <main className="flex flex-col items-center justify-between p-4 sm:p-8 md:p-12 lg:p-24">
       <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 text-center">
         {activeTab === "company" ? "Companies" : "Houses"} in Austria
       </h1>
@@ -88,6 +88,7 @@ export default function Home() {
               <CompanyList
                 companies={filteredCompanies}
                 onCompanySelect={setSelectedCompany}
+                setSelectedRegion={setSelectedRegion}
               />
             </TabsContent>
 
@@ -95,6 +96,7 @@ export default function Home() {
               <HouseList
                 houses={filteredHouses}
                 onHouseSelect={setSelectedHouse}
+                setSelectedRegion={setSelectedRegion}
               />
             </TabsContent>
 
@@ -112,12 +114,12 @@ export default function Home() {
                       houses.find((h) => h.id.toString() === value) || null
                     )
                   }
-                  defaultValue={toLocation?.id.toString()}
+                  defaultValue={fromLocation?.id.toString()}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select From Location" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="z-50 max-h-40 overflow-auto">
                     <SelectGroup>
                       <SelectLabel>Houses</SelectLabel>
                       {houses.map((house) => (
@@ -126,6 +128,17 @@ export default function Home() {
                         </SelectItem>
                       ))}
                     </SelectGroup>
+                    {/* <SelectGroup>
+                      <SelectLabel>Transport</SelectLabel>
+                      {austriaRailwayData.features.map((station) => (
+                        <SelectItem
+                          key={station.properties?.osm_id}
+                          value={station.properties!.name!.toString()}
+                        >
+                          {station.properties?.name}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup> */}
                   </SelectContent>
                 </Select>
               </div>
@@ -144,12 +157,12 @@ export default function Home() {
                         null
                     )
                   }
-                  defaultValue={fromLocation?.id.toString()}
+                  defaultValue={toLocation?.id.toString()}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select To Location" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="z-50 max-h-40 overflow-auto">
                     <SelectGroup>
                       <SelectLabel>Universities</SelectLabel>
                       {universities.map((university) => (
