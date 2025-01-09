@@ -249,6 +249,8 @@ const DistanceLines: React.FC<DistanceLinesProps> = ({
   fromLong,
 }) => {
   const distance = getDistance(toLat!, toLong!, fromLat!, fromLong!);
+  const { walkingTime, runningTime } = CalculateTime(distance);
+
   return (
     <>
       <Polyline
@@ -263,13 +265,40 @@ const DistanceLines: React.FC<DistanceLinesProps> = ({
         dashArray="5, 5"
       >
         <Tooltip permanent>
-          <span>
-            {/* {house.name} - {university.name} */}
-            {distance.toFixed(2)} km
-          </span>
+          <div>
+            <span>{distance.toFixed(2)} km</span>
+            <div className="flex items-center mt-1">
+              {/* <Walking className="w-4 h-4 mr-2 text-blue-500" /> */}
+              Walking: <span>{walkingTime}</span>
+            </div>
+            <div className="flex items-center mt-1">
+              {/* <Running className="w-4 h-4 mr-2 text-green-500" /> */}
+              Running: <span>{runningTime}</span>
+            </div>
+          </div>
         </Tooltip>
       </Polyline>
     </>
   );
 };
+
+const CalculateTime = (distanceKm: number) => {
+  const walkingSpeed = 5; // in km/h
+  const runningSpeed = 10; // in km/h
+
+  const walkingTimeInHours = distanceKm / walkingSpeed;
+  const runningTimeInHours = distanceKm / runningSpeed;
+
+  const formatTime = (timeInHours: number): string => {
+    const hours = Math.floor(timeInHours);
+    const minutes = Math.round((timeInHours - hours) * 60);
+    return `${hours}h ${minutes}m`;
+  };
+
+  return {
+    walkingTime: formatTime(walkingTimeInHours),
+    runningTime: formatTime(runningTimeInHours),
+  };
+};
+
 export default AustriaMap;
