@@ -2,6 +2,7 @@
 
 import CompanyList from "@/components/CompanyList";
 import HouseList from "@/components/HouseList";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -16,11 +17,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Toggle } from "@/components/ui/toggle";
 import { companies } from "@/data/companies";
 import { houses } from "@/data/houses";
+import { railways } from "@/data/railways";
 import { universities } from "@/data/universities";
 import { Company } from "@/types/company";
 import { House } from "@/types/house";
+import { Railway } from "@/types/railway";
 import { University } from "@/types/university";
-import { TrainFront } from "lucide-react";
+import { Search, TrainFront } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useState } from "react";
 
@@ -32,14 +35,14 @@ export default function Home() {
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
   const [selectedHouse, setSelectedHouse] = useState<House | null>(null);
-  const [fromLocation, setFromLocation] = useState<House | null>(houses[0]);
+  const [fromLocation, setFromLocation] = useState<House | Railway>(houses[0]);
   const [isTrainActive, setIsTrainActive] = useState(false);
-  const [toLocation, setToLocation] = useState<University | null>(
-    universities[0]
-  );
+  const [toLocation, setToLocation] = useState<University>(universities[0]);
   const [activeTab, setActiveTab] = useState<"company" | "house" | "distance">(
     "company"
   );
+  const [fromSearchQuery, setFromSearchQuery] = useState("");
+  const [toSearchQuery, setToSearchQuery] = useState("");
 
   const filteredCompanies = selectedRegion
     ? companies.filter((company) => company.region === selectedRegion)
@@ -52,6 +55,25 @@ export default function Home() {
   const handleTabChange = (tab: "company" | "house" | "distance") => {
     setActiveTab(tab);
   };
+
+  const handleFromLocationChange = (value: string) => {
+    const [type, id] = value.split("-");
+    if (type === "house") {
+      setFromLocation(houses.find((h) => h.id.toString() === id) || houses[0]);
+    } else if (type === "railway") {
+      setFromLocation(
+        railways.find((r) => r.id.toString() === id) || railways[0]
+      );
+    }
+  };
+
+  const filteredFromLocations = [...houses, ...railways].filter((location) =>
+    location.name.toLowerCase().includes(fromSearchQuery.toLowerCase())
+  );
+
+  const filteredToLocations = universities.filter((university) =>
+    university.name.toLowerCase().includes(toSearchQuery.toLowerCase())
+  );
 
   return (
     <main className="flex flex-col items-center justify-between p-4 sm:p-8 md:p-12 lg:p-24">
@@ -116,36 +138,55 @@ export default function Home() {
                   From
                 </Label>
                 <Select
-                  onValueChange={(value) =>
-                    setFromLocation(
-                      houses.find((h) => h.id.toString() === value) || null
-                    )
-                  }
-                  defaultValue={fromLocation?.id.toString()}
+                  onValueChange={handleFromLocationChange}
+                  defaultValue={`house-${fromLocation.id}`}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select From Location" />
                   </SelectTrigger>
                   <SelectContent className="z-50 max-h-40 overflow-auto">
+                    <div className="flex items-center px-3 pb-2">
+                      <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
+                      <Input
+                        placeholder="Search locations..."
+                        className="h-8 w-full bg-transparent focus:outline-none focus:ring-0"
+                        value={fromSearchQuery}
+                        onChange={(e) => setFromSearchQuery(e.target.value)}
+                      />
+                    </div>
                     <SelectGroup>
                       <SelectLabel>Houses</SelectLabel>
-                      {houses.map((house) => (
-                        <SelectItem key={house.id} value={house.id.toString()}>
-                          {house.name}
-                        </SelectItem>
-                      ))}
+                      {filteredFromLocations
+                        .filter(
+                          (location): location is House => "region" in location
+                        )
+                        .map((house) => (
+                          <SelectItem
+                            key={`house-${house.id}`}
+                            value={`house-${house.id}`}
+                          >
+                            {house.name}
+                          </SelectItem>
+                        ))}
                     </SelectGroup>
-                    {/* <SelectGroup>
-                      <SelectLabel>Transport</SelectLabel>
-                      {austriaRailwayData.features.map((station) => (
-                        <SelectItem
-                          key={station.properties?.osm_id}
-                          value={station.properties!.name!.toString()}
-                        >
-                          {station.properties?.name}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup> */}
+                    {isTrainActive && (
+                      <SelectGroup>
+                        <SelectLabel>Transport</SelectLabel>
+                        {filteredFromLocations
+                          .filter(
+                            (location): location is Railway =>
+                              !("region" in location)
+                          )
+                          .map((station) => (
+                            <SelectItem
+                              key={`railway-${station.id}`}
+                              value={`railway-${station.id}`}
+                            >
+                              {station.name}
+                            </SelectItem>
+                          ))}
+                      </SelectGroup>
+                    )}
                   </SelectContent>
                 </Select>
               </div>
@@ -161,18 +202,27 @@ export default function Home() {
                   onValueChange={(value) =>
                     setToLocation(
                       universities.find((u) => u.id.toString() === value) ||
-                        null
+                        universities[0]
                     )
                   }
-                  defaultValue={toLocation?.id.toString()}
+                  defaultValue={toLocation.id.toString()}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select To Location" />
                   </SelectTrigger>
                   <SelectContent className="z-50 max-h-40 overflow-auto">
+                    <div className="flex items-center px-3 pb-2">
+                      <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
+                      <Input
+                        placeholder="Search universities..."
+                        className="h-8 w-full bg-transparent focus:outline-none focus:ring-0"
+                        value={toSearchQuery}
+                        onChange={(e) => setToSearchQuery(e.target.value)}
+                      />
+                    </div>
                     <SelectGroup>
                       <SelectLabel>Universities</SelectLabel>
-                      {universities.map((university) => (
+                      {filteredToLocations.map((university) => (
                         <SelectItem
                           key={university.id}
                           value={university.id.toString()}
